@@ -4,6 +4,7 @@ import com.example.jwt_anhchinh2007.dto.request.SignInForm;
 import com.example.jwt_anhchinh2007.dto.request.SignUpForm;
 import com.example.jwt_anhchinh2007.dto.response.JwtResponse;
 import com.example.jwt_anhchinh2007.dto.response.ResponseMessage;
+import com.example.jwt_anhchinh2007.dto.response.ResponseObject;
 import com.example.jwt_anhchinh2007.model.Role;
 import com.example.jwt_anhchinh2007.model.RoleName;
 import com.example.jwt_anhchinh2007.model.Users;
@@ -78,7 +79,10 @@ public class AuthController {
         });
         user.setRoles(roles);
         usersService.save(user);
-        return new ResponseEntity<>(new ResponseMessage("Create user success"), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(  // bổ sung thêm 1 lớp response để thông báo rõ hơn giúp bên FE có thể triển khai dễ dang hơn
+                new ResponseObject("ok", "create use success", user)
+        );
+//        return new ResponseEntity<>(new ResponseMessage("Create user success"), HttpStatus.OK);
     }
 
     @PostMapping("/signin")
@@ -88,7 +92,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.createToken(authentication);
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
-        return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getName(), userPrinciple.getAuthorities()));
-
+//        return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getName(), userPrinciple.getAuthorities()));
+        return new ResponseEntity<>(new JwtResponse(token, userPrinciple.getName(), userPrinciple.getAuthorities()),HttpStatus.OK);
     }
 }

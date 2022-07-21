@@ -14,6 +14,4 @@ public class SignUpForm {
     private String email;
     private String password;
     private Set<String> roles;
-
-
 }
